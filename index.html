@@ -1,7 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1,
@@ -9,30 +11,36 @@
                user-scalable=no,
                viewport-fit=cover">
 
-<meta name="theme-color" content="#020000">
+<meta name="theme-color" content="#020202">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<title>AVIYAN // SECURE OPERATIONS</title>
+<title>AVIYAN // SECURITY OPERATIONS</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet">
 
 <style>
 
+/* =========================================================
+   CORE
+========================================================= */
+
 :root{
-    --red:#ff163d;
-    --red2:#ff4963;
-    --darkred:#8d001d;
-    --black:#010101;
-    --panel:rgba(10,10,12,.78);
-    --line:rgba(255,22,61,.22);
-    --white:#f7f7f7;
-    --muted:#777;
-    --green:#53ff9a;
-    --cyan:#5ee7ff;
+    --red:#ff1744;
+    --red2:#ff365c;
+    --red3:#8f001e;
+    --green:#59ffa2;
+    --cyan:#5ce7ff;
+    --yellow:#ffd85c;
+    --white:#f5f5f5;
+    --muted:#666;
+    --dim:#303030;
+    --black:#020202;
+    --panel:#070707;
 }
 
 *{
@@ -47,44 +55,23 @@ body{
     min-height:100%;
     background:#000;
     color:#fff;
-    font-family:Inter,Arial,sans-serif;
     overflow-x:hidden;
 }
 
 body{
-    min-height:100vh;
+    font-family:Inter,Arial,sans-serif;
 }
 
-/* =========================
-   CINEMATIC BACKGROUND
-========================= */
-
-body:before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:9000;
-
-    background:
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(255,0,40,.07),
-            transparent 38%
-        ),
-        radial-gradient(
-            circle at 15% 80%,
-            rgba(255,0,40,.05),
-            transparent 30%
-        );
-}
+/* =========================================================
+   CINEMATIC OVERLAY
+========================================================= */
 
 .scanlines{
     position:fixed;
     inset:0;
+    z-index:9999;
     pointer-events:none;
-    z-index:8000;
-    opacity:.11;
+    opacity:.12;
 
     background:
         repeating-linear-gradient(
@@ -98,14 +85,35 @@ body:before{
 .vignette{
     position:fixed;
     inset:0;
+    z-index:9998;
     pointer-events:none;
-    z-index:7999;
 
     background:
         radial-gradient(
             ellipse at center,
-            transparent 40%,
-            rgba(0,0,0,.55) 100%
+            transparent 35%,
+            rgba(0,0,0,.72) 100%
+        );
+}
+
+.grid-bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    opacity:.12;
+    pointer-events:none;
+
+    background-image:
+        linear-gradient(rgba(255,0,50,.08) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,0,50,.08) 1px,transparent 1px);
+
+    background-size:45px 45px;
+
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            black 20%,
+            transparent 80%
         );
 }
 
@@ -114,8 +122,8 @@ body:before{
     inset:-50%;
     width:200%;
     height:200%;
+    z-index:9997;
     pointer-events:none;
-    z-index:7998;
     opacity:.035;
 
     background-image:
@@ -126,33 +134,35 @@ body:before{
             transparent 3px
         );
 
-    animation:noise .15s steps(2) infinite;
+    animation:noise .12s steps(2) infinite;
 }
 
 @keyframes noise{
     0%{transform:translate(0,0)}
-    25%{transform:translate(2%,-1%)}
-    50%{transform:translate(-1%,2%)}
+    25%{transform:translate(1%,-1%)}
+    50%{transform:translate(-1%,1%)}
     75%{transform:translate(1%,1%)}
     100%{transform:translate(0,0)}
 }
 
-/* =========================
+/* =========================================================
    SCREENS
-========================= */
+========================================================= */
 
 .screen{
     position:fixed;
     inset:0;
     z-index:100;
-    background:#000;
+
     display:flex;
     align-items:center;
     justify-content:center;
 
+    background:#000;
+
     transition:
-        opacity 1s ease,
-        visibility 1s ease;
+        opacity .8s ease,
+        visibility .8s ease;
 }
 
 .screen.hidden{
@@ -161,265 +171,339 @@ body:before{
     pointer-events:none;
 }
 
-/* =========================
+/* =========================================================
+   SMALL UI
+========================================================= */
+
+.mono{
+    font-family:"Space Mono",monospace;
+}
+
+.red{
+    color:var(--red);
+}
+
+.green{
+    color:var(--green);
+}
+
+/* =========================================================
    ARRIVAL
-========================= */
+========================================================= */
 
 .arrival{
-    text-align:center;
     width:min(900px,90vw);
+    text-align:center;
 }
 
-.time{
+.arrival-time{
+    color:#444;
     font-family:"Space Mono",monospace;
-    font-size:11px;
+    font-size:10px;
     letter-spacing:4px;
-    color:#666;
-    margin-bottom:30px;
+    margin-bottom:40px;
 }
 
-.arrival-icon{
-    width:100px;
-    height:100px;
+.arrival-ring{
+    width:120px;
+    height:120px;
+
     margin:auto;
-    border:1px solid rgba(255,22,61,.4);
+
+    border:1px solid rgba(255,23,68,.4);
     border-radius:50%;
+
+    position:relative;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    color:var(--red);
-    font-family:Orbitron,sans-serif;
-    font-size:28px;
-
     box-shadow:
-        0 0 30px rgba(255,0,40,.12),
-        inset 0 0 25px rgba(255,0,40,.06);
+        0 0 40px rgba(255,0,40,.08),
+        inset 0 0 35px rgba(255,0,40,.05);
 
-    animation:pulse 2s infinite;
+    animation:ringPulse 2s infinite;
 }
 
-@keyframes pulse{
-    0%,100%{
-        transform:scale(1);
-        box-shadow:0 0 30px rgba(255,0,40,.1);
-    }
+.arrival-ring:before,
+.arrival-ring:after{
+    content:"";
+    position:absolute;
+    border:1px solid rgba(255,23,68,.18);
+    border-radius:50%;
+}
 
-    50%{
-        transform:scale(1.04);
-        box-shadow:0 0 55px rgba(255,0,40,.25);
-    }
+.arrival-ring:before{
+    inset:12px;
+}
+
+.arrival-ring:after{
+    inset:25px;
+}
+
+.arrival-letter{
+    position:relative;
+    z-index:2;
+
+    font-family:Orbitron,sans-serif;
+    font-size:34px;
+    color:var(--red);
+
+    text-shadow:
+        0 0 20px rgba(255,0,40,.8);
 }
 
 .arrival h1{
-    margin-top:38px;
+    margin-top:42px;
 
     font-family:Orbitron,sans-serif;
-    font-size:clamp(30px,7vw,72px);
+    font-size:clamp(28px,7vw,70px);
     letter-spacing:8px;
-    font-weight:700;
 }
 
 .arrival p{
-    margin-top:18px;
-    color:#777;
+    margin-top:15px;
+
+    color:#555;
     font-family:"Space Mono",monospace;
-    font-size:11px;
+    font-size:9px;
     letter-spacing:3px;
 }
 
 .arrival-line{
     width:0;
     height:1px;
+    margin:35px auto;
+
     background:var(--red);
-    margin:35px auto 0;
+    box-shadow:0 0 15px var(--red);
 
-    animation:arrivalLine 2.5s forwards;
+    animation:lineGrow 3s forwards;
 }
 
-@keyframes arrivalLine{
-    to{width:min(500px,70vw)}
+@keyframes lineGrow{
+    to{
+        width:min(520px,70vw);
+    }
 }
 
-/* =========================
+@keyframes ringPulse{
+    0%,100%{
+        transform:scale(1);
+        box-shadow:0 0 35px rgba(255,0,40,.08);
+    }
+
+    50%{
+        transform:scale(1.04);
+        box-shadow:0 0 65px rgba(255,0,40,.2);
+    }
+}
+
+/* =========================================================
    BOOT
-========================= */
+========================================================= */
 
 .boot{
-    width:min(850px,90vw);
+    width:min(900px,90vw);
+}
+
+.boot-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    border-bottom:1px solid #181818;
+
+    padding-bottom:15px;
 }
 
 .boot-title{
     font-family:Orbitron,sans-serif;
     color:var(--red);
-    font-size:clamp(18px,4vw,30px);
-    letter-spacing:5px;
-    margin-bottom:25px;
+    font-size:clamp(15px,3vw,25px);
+    letter-spacing:4px;
+}
+
+.boot-id{
+    color:#444;
+    font:9px "Space Mono",monospace;
 }
 
 .boot-sub{
-    font-family:"Space Mono",monospace;
-    color:#555;
-    font-size:10px;
+    margin-top:15px;
+
+    color:#444;
+    font:9px "Space Mono",monospace;
     letter-spacing:2px;
-    margin-bottom:30px;
 }
 
 .boot-log{
-    height:260px;
-    overflow:hidden;
+    height:300px;
+    margin-top:30px;
 
-    border-left:1px solid var(--red);
+    border-left:1px solid rgba(255,23,68,.5);
+
     padding-left:20px;
 
-    font-family:"Space Mono",monospace;
-    font-size:11px;
-    line-height:2;
+    overflow:hidden;
 
-    color:#888;
+    font:10px/2 "Space Mono",monospace;
+    color:#666;
 }
 
-.boot-log .ok{
-    color:#aaa;
+.boot-line.ok{
+    color:#999;
 }
 
-.boot-log .active{
+.boot-line.active{
     color:var(--red);
 }
 
+.boot-line.system{
+    color:var(--cyan);
+}
+
 .boot-progress{
-    margin-top:25px;
-    width:100%;
     height:2px;
-    background:#161616;
+    background:#111;
+    margin-top:25px;
 }
 
 .boot-progress span{
     display:block;
     width:0;
     height:100%;
+
     background:var(--red);
+
     box-shadow:0 0 15px var(--red);
-    animation:bootProgress 5s linear forwards;
+
+    animation:
+        bootProgress 12s linear forwards;
 }
 
 @keyframes bootProgress{
-    to{width:100%}
+    to{
+        width:100%;
+    }
 }
 
-/* =========================
-   AUTH
-========================= */
+/* =========================================================
+   LOGIN
+========================================================= */
 
 .auth{
     width:min(620px,90vw);
 }
 
-.small-label{
-    font-family:"Space Mono",monospace;
-    color:#555;
-    font-size:10px;
+.auth-label{
+    color:#444;
+    font:9px "Space Mono",monospace;
     letter-spacing:3px;
-    margin-bottom:15px;
 }
 
 .auth h1{
+    margin-top:15px;
+
     font-family:Orbitron,sans-serif;
-    font-size:clamp(25px,6vw,50px);
+    font-size:clamp(27px,6vw,52px);
     letter-spacing:5px;
-    margin-bottom:8px;
 }
 
-.auth-desc{
-    color:#555;
-    font-family:"Space Mono",monospace;
-    font-size:10px;
+.auth-description{
+    margin-top:10px;
+
+    color:#444;
+    font:9px "Space Mono",monospace;
     letter-spacing:2px;
-    margin-bottom:40px;
 }
 
 .auth-card{
-    border:1px solid rgba(255,22,61,.3);
-    background:linear-gradient(
-        145deg,
-        rgba(255,0,30,.04),
-        rgba(255,255,255,.015)
-    );
+    margin-top:35px;
 
-    padding:30px;
+    padding:28px;
+
+    border:1px solid rgba(255,23,68,.28);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,0,40,.05),
+            rgba(255,255,255,.01)
+        );
 
     box-shadow:
-        0 0 60px rgba(255,0,30,.05),
-        inset 0 0 30px rgba(255,0,30,.025);
+        0 0 70px rgba(255,0,40,.05),
+        inset 0 0 35px rgba(255,0,40,.02);
 }
 
-.field{
-    margin-bottom:22px;
+.auth-row{
+    margin-bottom:25px;
 }
 
-.field-label{
+.auth-row-label{
     display:block;
-    font-family:"Space Mono",monospace;
-    color:#666;
-    font-size:9px;
+
+    color:#555;
+    font:8px "Space Mono",monospace;
     letter-spacing:3px;
+
     margin-bottom:9px;
 }
 
-.field-value{
-    border-bottom:1px solid #242424;
+.auth-static{
+    color:#ddd;
+    font:13px "Space Mono",monospace;
+
     padding-bottom:10px;
 
-    font-family:"Space Mono",monospace;
-    font-size:13px;
-    color:#ddd;
+    border-bottom:1px solid #222;
 }
 
-.password-row{
+.password-container{
     display:flex;
     align-items:center;
-    border-bottom:1px solid #292929;
+
+    border-bottom:1px solid #333;
 }
 
-.password-row span{
+.password-prefix{
     color:var(--red);
-    font-family:"Space Mono",monospace;
-    margin-right:8px;
+    font:16px "Space Mono",monospace;
+    margin-right:9px;
 }
 
 #password{
     width:100%;
+
     border:none;
     outline:none;
-    background:transparent;
+    background:none;
 
     color:var(--red);
 
-    font-family:"Space Mono",monospace;
-    font-size:18px;
-    letter-spacing:3px;
+    font:18px "Space Mono",monospace;
+    letter-spacing:5px;
 
     padding:10px 0;
 }
 
 #password::placeholder{
-    color:#333;
+    color:#252525;
 }
 
-.auth-btn{
+.auth-button{
     width:100%;
-    margin-top:25px;
+
+    border:1px solid rgba(255,23,68,.5);
 
     background:transparent;
-    color:#fff;
+    color:#ddd;
 
-    border:1px solid rgba(255,22,61,.55);
+    padding:16px;
 
-    padding:17px;
-
-    font-family:Orbitron,sans-serif;
-    font-size:10px;
+    font:10px Orbitron,sans-serif;
     letter-spacing:3px;
 
     cursor:pointer;
@@ -427,552 +511,703 @@ body:before{
     transition:.3s;
 }
 
-.auth-btn:hover,
-.auth-btn:active{
+.auth-button:hover,
+.auth-button:active{
     background:var(--red);
     color:#000;
-    box-shadow:0 0 35px rgba(255,0,40,.4);
+    box-shadow:0 0 35px rgba(255,0,40,.35);
 }
 
 .auth-status{
-    height:20px;
-    margin-top:18px;
+    min-height:18px;
 
-    font-family:"Space Mono",monospace;
-    font-size:10px;
-    color:#555;
+    margin-top:15px;
+
+    color:#444;
+
+    font:9px "Space Mono",monospace;
+    letter-spacing:1px;
 }
 
 .auth-status.success{
     color:var(--green);
 }
 
-/* =========================
-   ACCESS GRANTED
-========================= */
+/* =========================================================
+   ACCESS
+========================================================= */
 
 .access{
     text-align:center;
 }
 
-.access-code{
-    font-family:"Space Mono",monospace;
-    color:#555;
-    font-size:10px;
+.access-small{
+    color:#444;
+    font:9px "Space Mono",monospace;
     letter-spacing:4px;
 }
 
 .access h1{
-    margin-top:25px;
+    margin-top:22px;
 
     font-family:Orbitron,sans-serif;
-    font-size:clamp(42px,11vw,115px);
-    letter-spacing:10px;
-
-    color:#fff;
+    font-size:clamp(42px,11vw,110px);
+    line-height:.95;
+    letter-spacing:8px;
 
     text-shadow:
-        0 0 20px rgba(255,0,40,.7),
-        0 0 70px rgba(255,0,40,.25);
+        0 0 25px rgba(255,0,40,.7),
+        0 0 80px rgba(255,0,40,.2);
 
-    animation:accessGlitch 1.5s infinite;
+    animation:glitch 1.4s infinite;
 }
 
-@keyframes accessGlitch{
-    0%,92%,100%{transform:translate(0)}
-    93%{transform:translate(3px,-1px)}
-    95%{transform:translate(-4px,2px)}
-    97%{transform:translate(2px,0)}
-}
-
-.access h2{
+.access-team{
     margin-top:30px;
 
     color:var(--red);
 
-    font-family:Orbitron,sans-serif;
-    font-size:clamp(13px,3vw,22px);
+    font:clamp(12px,3vw,20px) Orbitron,sans-serif;
     letter-spacing:4px;
 }
 
-.access p{
-    margin-top:18px;
+.access-detail{
+    margin-top:15px;
 
-    font-family:"Space Mono",monospace;
-    font-size:10px;
-    color:#555;
-    letter-spacing:3px;
+    color:#444;
+    font:9px "Space Mono",monospace;
+    letter-spacing:2px;
 }
 
-/* =========================
-   COMMAND CENTER
-========================= */
+@keyframes glitch{
+    0%,92%,100%{transform:translate(0)}
+    93%{transform:translate(3px,-1px)}
+    95%{transform:translate(-3px,1px)}
+    97%{transform:translate(1px,0)}
+}
 
-#command{
+/* =========================================================
+   WORKSTATION
+========================================================= */
+
+#workstation{
     position:relative;
+    z-index:10;
+
     min-height:100vh;
-    padding:20px;
-    padding-bottom:100px;
+
+    background:
+        radial-gradient(
+            circle at 50% 30%,
+            rgba(255,0,40,.035),
+            transparent 35%
+        );
 }
 
-.command-shell{
-    width:min(1450px,100%);
+.workspace{
+    width:min(1500px,100%);
     margin:auto;
+
+    padding:15px;
 }
 
-/* top bar */
+/* top system bar */
 
-.topbar{
-    height:65px;
-
-    border-bottom:1px solid rgba(255,22,61,.2);
+.system-bar{
+    height:55px;
 
     display:flex;
     align-items:center;
     justify-content:space-between;
 
+    border-bottom:1px solid #191919;
+
     font-family:"Space Mono",monospace;
 }
 
-.brand{
+.system-left{
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:12px;
 }
 
-.brand-mark{
-    width:10px;
-    height:10px;
-    background:var(--red);
+.system-dot{
+    width:8px;
+    height:8px;
+
+    background:var(--green);
     border-radius:50%;
-    box-shadow:0 0 15px var(--red);
+
+    box-shadow:0 0 12px var(--green);
 }
 
-.brand-name{
-    font-family:Orbitron,sans-serif;
-    font-size:12px;
+.system-brand{
+    font:11px Orbitron,sans-serif;
     letter-spacing:3px;
 }
 
-.status{
-    color:var(--green);
-    font-size:9px;
+.system-right{
+    color:#555;
+    font-size:8px;
     letter-spacing:2px;
 }
 
-/* hero */
+/* workspace title */
 
-.command-heading{
-    padding:55px 0 35px;
+.workspace-title{
+    padding:30px 0 20px;
 }
 
-.command-heading .eyebrow{
+.workspace-title .eyebrow{
     color:var(--red);
-    font-family:"Space Mono",monospace;
-    font-size:9px;
+    font:8px "Space Mono",monospace;
     letter-spacing:4px;
 }
 
-.command-heading h1{
-    margin-top:12px;
-    font-family:Orbitron,sans-serif;
-    font-size:clamp(30px,6vw,70px);
-    letter-spacing:4px;
+.workspace-title h1{
+    margin-top:8px;
+
+    font:clamp(25px,5vw,52px) Orbitron,sans-serif;
+    letter-spacing:3px;
 }
 
-.command-heading p{
-    margin-top:12px;
-    color:#555;
-    font-family:"Space Mono",monospace;
-    font-size:10px;
+.workspace-title p{
+    margin-top:8px;
+
+    color:#444;
+    font:9px "Space Mono",monospace;
 }
 
-/* grid */
+/* main IDE */
 
-.dashboard{
+.ide{
     display:grid;
-    grid-template-columns:1.3fr .7fr;
-    gap:15px;
+    grid-template-columns:220px 1fr 280px;
+
+    min-height:570px;
+
+    border:1px solid #1b1b1b;
+
+    background:#030303;
+
+    box-shadow:
+        0 0 80px rgba(0,0,0,.8);
 }
 
-.panel{
-    position:relative;
-    min-height:260px;
+/* sidebar */
 
-    border:1px solid rgba(255,22,61,.16);
+.sidebar{
+    border-right:1px solid #181818;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,0,30,.045),
-            rgba(255,255,255,.01)
-        );
-
-    overflow:hidden;
+    background:#050505;
 }
 
-.panel:before{
-    content:"";
-    position:absolute;
-    inset:0;
+.sidebar-title{
+    height:42px;
 
-    background:
-        linear-gradient(
-            transparent 49%,
-            rgba(255,22,61,.035) 50%,
-            transparent 51%
-        );
-
-    background-size:100% 10px;
-    pointer-events:none;
-}
-
-.panel-head{
-    height:45px;
+    display:flex;
+    align-items:center;
 
     padding:0 15px;
 
-    border-bottom:1px solid rgba(255,22,61,.13);
+    border-bottom:1px solid #181818;
+
+    color:#555;
+    font:8px "Space Mono",monospace;
+    letter-spacing:2px;
+}
+
+.file{
+    padding:12px 15px;
+
+    border-bottom:1px solid #0e0e0e;
+
+    color:#666;
+
+    font:9px "Space Mono",monospace;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.file:hover,
+.file.active{
+    color:#fff;
+    background:rgba(255,23,68,.07);
+
+    border-left:2px solid var(--red);
+}
+
+.file .icon{
+    color:var(--red);
+    margin-right:8px;
+}
+
+.file.restricted{
+    color:#5b333b;
+}
+
+/* editor */
+
+.editor{
+    min-width:0;
+
+    display:flex;
+    flex-direction:column;
+}
+
+.editor-header{
+    height:42px;
 
     display:flex;
     align-items:center;
     justify-content:space-between;
 
-    font-family:"Space Mono",monospace;
-    font-size:9px;
+    padding:0 15px;
+
+    border-bottom:1px solid #181818;
+
+    background:#060606;
+}
+
+.editor-file{
+    color:#aaa;
+    font:9px "Space Mono",monospace;
+}
+
+.editor-state{
+    color:var(--green);
+    font:8px "Space Mono",monospace;
+}
+
+.code{
+    flex:1;
+
+    padding:18px 0;
+
+    overflow:auto;
+
+    font:10px/1.8 "Space Mono",monospace;
+
+    background:
+        linear-gradient(
+            90deg,
+            #080808 0,
+            #080808 48px,
+            #030303 48px
+        );
+}
+
+.code-line{
+    display:flex;
+    min-height:18px;
+    padding-right:20px;
+}
+
+.line-number{
+    width:48px;
+    flex:none;
+
+    text-align:right;
+    padding-right:13px;
+
+    color:#292929;
+    user-select:none;
+}
+
+.code-content{
+    white-space:pre;
+    color:#777;
+}
+
+.kw{
+    color:#ff4963;
+}
+
+.fn{
+    color:#5ce7ff;
+}
+
+.str{
+    color:#79e69c;
+}
+
+.comment{
+    color:#3d3d3d;
+}
+
+.var{
+    color:#d5d5d5;
+}
+
+.cursor{
+    display:inline-block;
+    width:6px;
+    height:12px;
+
+    margin-left:2px;
+
+    background:var(--red);
+
+    animation:blink .8s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0}
+}
+
+/* right monitor */
+
+.monitor{
+    border-left:1px solid #181818;
+    background:#050505;
+}
+
+.monitor-title{
+    height:42px;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 15px;
+
+    border-bottom:1px solid #181818;
+
+    color:#555;
+    font:8px "Space Mono",monospace;
     letter-spacing:2px;
 }
 
-.panel-head span:first-child{
-    color:#aaa;
+.monitor-body{
+    padding:15px;
 }
 
-.panel-head span:last-child{
-    color:var(--red);
+.monitor-section{
+    margin-bottom:25px;
 }
 
-.panel-body{
-    padding:18px;
+.monitor-label{
+    color:#444;
+    font:7px "Space Mono",monospace;
+    letter-spacing:2px;
+    margin-bottom:8px;
 }
 
-/* threat map */
-
-.network{
-    position:relative;
-    height:270px;
-    overflow:hidden;
+.monitor-value{
+    color:#ddd;
+    font:11px "Space Mono",monospace;
 }
 
-.network svg{
-    width:100%;
-    height:100%;
+.monitor-line{
+    height:2px;
+    background:#171717;
+    margin-top:8px;
 }
 
-.node{
-    fill:var(--red);
-    filter:drop-shadow(0 0 7px var(--red));
-}
-
-.connection{
-    stroke:rgba(255,22,61,.3);
-    stroke-width:1;
-}
-
-.node-label{
-    fill:#666;
-    font-family:"Space Mono",monospace;
-    font-size:7px;
-}
-
-/* threat bars */
-
-.threat{
-    margin-bottom:17px;
-}
-
-.threat-top{
-    display:flex;
-    justify-content:space-between;
-
-    font-family:"Space Mono",monospace;
-    font-size:8px;
-    color:#777;
-
-    margin-bottom:7px;
-}
-
-.threat-bar{
-    height:3px;
-    background:#151515;
-}
-
-.threat-bar span{
+.monitor-line span{
     display:block;
     height:100%;
+    width:0;
+
     background:var(--red);
-    box-shadow:0 0 8px rgba(255,0,40,.4);
+    box-shadow:0 0 8px var(--red);
+
+    transition:width 1s;
+}
+
+.activity{
+    height:180px;
+    overflow:hidden;
+
+    font:8px/1.9 "Space Mono",monospace;
+    color:#444;
+}
+
+.activity .ok{
+    color:#70bc8f;
+}
+
+.activity .alert{
+    color:var(--red);
 }
 
 /* terminal */
 
 .terminal{
-    height:270px;
+    margin-top:15px;
+
+    border:1px solid #191919;
 
     background:#020202;
-    padding:15px;
-
-    font-family:"Space Mono",monospace;
-    font-size:9px;
-
-    overflow:hidden;
 }
 
-.term-line{
-    margin-bottom:7px;
-    color:#666;
+.terminal-head{
+    height:38px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 14px;
+
+    border-bottom:1px solid #151515;
+
+    font:8px "Space Mono",monospace;
+    color:#555;
 }
 
-.term-line .cmd{
+.terminal-body{
+    height:185px;
+
+    padding:14px;
+
+    overflow:auto;
+
+    font:9px/1.8 "Space Mono",monospace;
+}
+
+.terminal-line{
+    color:#555;
+}
+
+.terminal-line.command{
     color:#ddd;
 }
 
-.term-line .red{
-    color:var(--red);
-}
-
-.term-line .green{
+.terminal-line.success{
     color:var(--green);
 }
 
-.term-input{
+.terminal-line.warning{
+    color:var(--yellow);
+}
+
+.terminal-input-row{
     display:flex;
-    margin-top:12px;
-}
 
-.term-input span{
     color:var(--red);
-    margin-right:7px;
 }
 
-#terminalInput{
+.terminal-input-row span{
+    margin-right:8px;
+}
+
+#commandInput{
     flex:1;
-    background:none;
+
     border:none;
     outline:none;
+
+    background:transparent;
     color:#fff;
 
-    font:inherit;
+    font:9px "Space Mono",monospace;
 }
 
-/* core */
+/* =========================================================
+   CINEMATIC FILE OVERLAY
+========================================================= */
 
-.core{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:260px;
-}
+.file-overlay{
+    position:fixed;
+    inset:0;
 
-.core-circle{
-    width:150px;
-    height:150px;
+    z-index:5000;
 
-    border:1px solid rgba(255,22,61,.35);
-    border-radius:50%;
+    background:#000;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    position:relative;
+    opacity:0;
+    visibility:hidden;
 
-    animation:coreRotate 12s linear infinite;
+    transition:.5s;
 }
 
-.core-circle:before,
-.core-circle:after{
-    content:"";
-    position:absolute;
-
-    border:1px solid rgba(255,22,61,.2);
-    border-radius:50%;
+.file-overlay.open{
+    opacity:1;
+    visibility:visible;
 }
 
-.core-circle:before{
-    inset:18px;
-}
+.file-window{
+    width:min(1000px,92vw);
+    height:min(650px,88vh);
 
-.core-circle:after{
-    inset:40px;
-}
+    border:1px solid rgba(255,23,68,.3);
 
-.core-center{
-    width:35px;
-    height:35px;
-    border-radius:50%;
+    background:#030303;
 
-    background:var(--red);
     box-shadow:
-        0 0 20px var(--red),
-        0 0 50px rgba(255,0,40,.3);
+        0 0 100px rgba(255,0,40,.12);
 
-    z-index:2;
+    display:flex;
+    flex-direction:column;
 }
 
-@keyframes coreRotate{
-    to{transform:rotate(360deg)}
+.file-window-head{
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 15px;
+
+    border-bottom:1px solid #1b1b1b;
 }
 
-/* work controls */
-
-.controls{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
-    margin-top:15px;
+.window-title{
+    color:#aaa;
+    font:9px "Space Mono",monospace;
 }
 
-.control{
-    border:1px solid #202020;
-    background:#050505;
-    color:#777;
+.window-status{
+    color:var(--red);
+    font:8px "Space Mono",monospace;
+}
 
-    padding:17px 10px;
+.file-window-code{
+    flex:1;
 
-    text-align:center;
+    overflow:auto;
 
-    font-family:"Space Mono",monospace;
-    font-size:8px;
-    letter-spacing:1px;
+    padding:20px;
+
+    font:10px/1.9 "Space Mono",monospace;
+}
+
+.close-window{
+    border:1px solid #292929;
+
+    background:transparent;
+    color:#666;
+
+    padding:8px 12px;
+
+    font:8px "Space Mono",monospace;
 
     cursor:pointer;
-
-    transition:.25s;
 }
 
-.control:hover,
-.control.active{
+.close-window:hover{
+    color:#fff;
     border-color:var(--red);
-    color:#fff;
-
-    box-shadow:
-        inset 0 0 25px rgba(255,0,40,.06),
-        0 0 20px rgba(255,0,40,.08);
 }
 
-/* =========================
-   PERSONAL MESSAGE
-========================= */
+/* =========================================================
+   RESTRICTED FILE
+========================================================= */
 
-.personal{
-    margin-top:70px;
-    min-height:350px;
-
-    border-top:1px solid rgba(255,22,61,.2);
-    border-bottom:1px solid rgba(255,22,61,.2);
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    text-align:center;
-
-    position:relative;
-}
-
-.personal-inner{
-    width:min(800px,90vw);
-}
-
-.personal-label{
-    color:var(--red);
-    font-family:"Space Mono",monospace;
-    font-size:9px;
-    letter-spacing:4px;
-}
-
-.personal h2{
-    margin-top:30px;
-
-    font-size:clamp(24px,5vw,52px);
-    font-weight:300;
-    line-height:1.3;
-}
-
-.personal h2 strong{
-    color:#fff;
-    font-weight:600;
-}
-
-.personal .question{
-    margin-top:20px;
-
-    font-family:Orbitron,sans-serif;
-    color:var(--red);
-    font-size:clamp(12px,2vw,18px);
-    letter-spacing:3px;
-}
-
-.personal-line{
-    width:80px;
-    height:1px;
-    background:var(--red);
-    margin:30px auto;
-    box-shadow:0 0 15px var(--red);
-}
-
-/* =========================
-   FINAL
-========================= */
-
-.final{
-    min-height:300px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    text-align:center;
-}
-
-.final h2{
-    font-family:Orbitron,sans-serif;
-    font-size:clamp(25px,6vw,65px);
-    letter-spacing:8px;
-}
-
-.final p{
-    margin-top:15px;
-    color:#444;
-    font-family:"Space Mono",monospace;
-    font-size:9px;
-    letter-spacing:3px;
-}
-
-/* =========================
-   NOTIFICATION
-========================= */
-
-.notification{
+.reveal{
     position:fixed;
-    right:25px;
-    bottom:25px;
-
-    width:min(390px,calc(100vw - 40px));
-
-    border:1px solid rgba(255,22,61,.4);
-    background:rgba(5,5,5,.96);
-
-    padding:18px;
+    inset:0;
 
     z-index:7000;
 
-    transform:translateY(150%);
+    background:#000;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:1.2s;
+}
+
+.reveal.open{
+    opacity:1;
+    visibility:visible;
+}
+
+.reveal-inner{
+    width:min(750px,88vw);
+    text-align:center;
+}
+
+.reveal-classification{
+    color:#555;
+    font:8px "Space Mono",monospace;
+    letter-spacing:4px;
+}
+
+.reveal h1{
+    margin-top:25px;
+
+    font:clamp(30px,7vw,70px) Orbitron,sans-serif;
+    letter-spacing:7px;
+
+    text-shadow:0 0 30px rgba(255,0,40,.5);
+}
+
+.reveal-line{
+    width:80px;
+    height:1px;
+
+    margin:30px auto;
+
+    background:var(--red);
+    box-shadow:0 0 20px var(--red);
+}
+
+.reveal-message{
+    color:#999;
+
+    font-size:clamp(14px,2vw,19px);
+    line-height:1.8;
+
+    opacity:0;
+
+    animation:messageAppear 2s 1.5s forwards;
+}
+
+.reveal-signature{
+    margin-top:35px;
+
+    color:var(--red);
+
+    font:12px Orbitron,sans-serif;
+    letter-spacing:4px;
+
+    opacity:0;
+
+    animation:messageAppear 2s 3s forwards;
+}
+
+@keyframes messageAppear{
+    to{
+        opacity:1;
+    }
+}
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+.notification{
+    position:fixed;
+
+    right:20px;
+    bottom:20px;
+
+    width:min(390px,calc(100vw - 40px));
+
+    z-index:8000;
+
+    border:1px solid rgba(255,23,68,.4);
+
+    background:rgba(3,3,3,.96);
+
+    padding:16px;
+
+    transform:translateY(130%);
     opacity:0;
 
     transition:.5s;
-
-    box-shadow:0 0 40px rgba(255,0,40,.1);
 }
 
 .notification.show{
@@ -980,73 +1215,83 @@ body:before{
     opacity:1;
 }
 
-.notification-top{
-    display:flex;
-    justify-content:space-between;
-
-    font-family:"Space Mono",monospace;
-    font-size:8px;
-    color:#666;
-    letter-spacing:2px;
-}
-
-.notification-top span:last-child{
+.notification-label{
     color:var(--red);
+    font:8px "Space Mono",monospace;
+    letter-spacing:3px;
 }
 
-.notification p{
-    margin-top:12px;
-    color:#ddd;
-    font-size:13px;
-    line-height:1.6;
+.notification-text{
+    margin-top:9px;
+
+    color:#bbb;
+    font-size:12px;
+    line-height:1.5;
 }
 
-/* =========================
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
-@media(max-width:800px){
+@media(max-width:900px){
 
-    #command{
-        padding:12px;
+    .ide{
+        grid-template-columns:180px 1fr;
     }
 
-    .topbar{
-        height:55px;
-    }
-
-    .status{
+    .monitor{
         display:none;
     }
 
-    .command-heading{
-        padding:35px 0 25px;
+}
+
+@media(max-width:650px){
+
+    .workspace{
+        padding:10px;
     }
 
-    .dashboard{
+    .system-right{
+        display:none;
+    }
+
+    .workspace-title{
+        padding:25px 0 15px;
+    }
+
+    .ide{
         grid-template-columns:1fr;
+        min-height:600px;
     }
 
-    .panel{
-        min-height:240px;
+    .sidebar{
+        border-right:none;
+        border-bottom:1px solid #181818;
+
+        display:flex;
+        overflow-x:auto;
     }
 
-    .network,
-    .terminal{
-        height:230px;
+    .sidebar-title{
+        min-width:120px;
     }
 
-    .controls{
-        grid-template-columns:repeat(2,1fr);
+    .file{
+        min-width:155px;
+        border-bottom:none;
     }
 
-    .personal{
-        margin-top:50px;
-        min-height:300px;
+    .code{
+        height:350px;
+        flex:none;
+    }
+
+    .terminal-body{
+        height:180px;
     }
 
     .auth-card{
-        padding:22px;
+        padding:20px;
     }
 
     .arrival h1{
@@ -1057,23 +1302,54 @@ body:before{
 
 @media(max-width:430px){
 
-    .arrival-icon{
-        width:80px;
-        height:80px;
+    .arrival-ring{
+        width:90px;
+        height:90px;
+    }
+
+    .arrival-letter{
+        font-size:25px;
     }
 
     .boot-log{
-        height:230px;
-    }
-
-    .command-heading h1{
-        letter-spacing:2px;
-    }
-
-    .panel-head{
+        height:260px;
         font-size:8px;
     }
 
+    .code{
+        font-size:8px;
+    }
+
+    .code-content{
+        font-size:8px;
+    }
+
+}
+
+/* =========================================================
+   RED FLASH
+========================================================= */
+
+.flash{
+    position:fixed;
+    inset:0;
+
+    z-index:9500;
+
+    background:var(--red);
+
+    opacity:0;
+
+    pointer-events:none;
+}
+
+.flash.active{
+    animation:flash .35s;
+}
+
+@keyframes flash{
+    0%{opacity:.15}
+    100%{opacity:0}
 }
 
 </style>
@@ -1081,31 +1357,33 @@ body:before{
 
 <body>
 
+<div class="grid-bg"></div>
 <div class="scanlines"></div>
 <div class="vignette"></div>
 <div class="noise"></div>
+<div class="flash" id="flash"></div>
 
 
-<!-- ==================================================
+<!-- =======================================================
      ARRIVAL
-================================================== -->
+======================================================= -->
 
-<section id="arrivalScreen" class="screen">
+<section class="screen" id="arrivalScreen">
 
     <div class="arrival">
 
-        <div class="time" id="clock">
-            07:42:18 // SECURE FACILITY
+        <div class="arrival-time" id="arrivalClock">
+            05:53:00 // SECURE FACILITY
         </div>
 
-        <div class="arrival-icon">
-            A
+        <div class="arrival-ring">
+            <div class="arrival-letter">A</div>
         </div>
 
         <h1>OPERATOR ARRIVAL</h1>
 
         <p>
-            SECURE OPERATIONS FACILITY // ENTRY CONFIRMED
+            SECURE CYBER OPERATIONS FACILITY // NODE 07
         </p>
 
         <div class="arrival-line"></div>
@@ -1115,20 +1393,28 @@ body:before{
 </section>
 
 
-<!-- ==================================================
+<!-- =======================================================
      BOOT
-================================================== -->
+======================================================= -->
 
-<section id="bootScreen" class="screen hidden">
+<section class="screen hidden" id="bootScreen">
 
     <div class="boot">
 
-        <div class="boot-title">
-            CYBER SECURITY OPERATIONS
+        <div class="boot-top">
+
+            <div class="boot-title">
+                SECURITY OPERATIONS
+            </div>
+
+            <div class="boot-id">
+                NODE // 07
+            </div>
+
         </div>
 
         <div class="boot-sub">
-            WORKSTATION INITIALIZATION // NODE 07
+            WORKSTATION INITIALIZATION // SECURE ENVIRONMENT
         </div>
 
         <div class="boot-log" id="bootLog"></div>
@@ -1142,60 +1428,61 @@ body:before{
 </section>
 
 
-<!-- ==================================================
-     AUTHENTICATION
-================================================== -->
+<!-- =======================================================
+     LOGIN
+======================================================= -->
 
-<section id="authScreen" class="screen hidden">
+<section class="screen hidden" id="authScreen">
 
     <div class="auth">
 
-        <div class="small-label">
-            SECURE WORKSTATION // AUTHENTICATION REQUIRED
+        <div class="auth-label">
+            SECURE WORKSTATION // LEVEL ALPHA
         </div>
 
         <h1>OPERATOR LOGIN</h1>
 
-        <div class="auth-desc">
-            IDENTIFY YOURSELF TO ACCESS THE OPERATIONS FLOOR
+        <div class="auth-description">
+            AUTHENTICATION REQUIRED BEFORE OPERATIONS ACCESS
         </div>
 
         <div class="auth-card">
 
-            <div class="field">
+            <div class="auth-row">
 
-                <span class="field-label">
-                    OPERATOR IDENTIFICATION
+                <span class="auth-row-label">
+                    OPERATOR
                 </span>
 
-                <div class="field-value">
+                <div class="auth-static">
                     AVIYAN
                 </div>
 
             </div>
 
-            <div class="field">
+            <div class="auth-row">
 
-                <span class="field-label">
-                    SECURITY CLEARANCE
+                <span class="auth-row-label">
+                    DEPARTMENT
                 </span>
 
-                <div class="field-value">
-                    ALPHA // CYBER OPERATIONS
+                <div class="auth-static">
+                    SECURITY OPERATIONS TEAM
                 </div>
 
             </div>
 
-            <div class="field">
+            <div class="auth-row">
 
-                <span class="field-label">
+                <span class="auth-row-label">
                     PASSWORD
                 </span>
 
-                <div class="password-row">
+                <div class="password-container">
 
-                    <span>›</span>
+                    <span class="password-prefix">›</span>
 
+                    <!-- INTENTIONALLY VISIBLE -->
                     <input
                         id="password"
                         type="text"
@@ -1209,7 +1496,7 @@ body:before{
 
             </div>
 
-            <button class="auth-btn" id="authBtn">
+            <button class="auth-button" id="authButton">
                 AUTHENTICATE OPERATOR
             </button>
 
@@ -1224,409 +1511,321 @@ body:before{
 </section>
 
 
-<!-- ==================================================
+<!-- =======================================================
      ACCESS GRANTED
-================================================== -->
+======================================================= -->
 
-<section id="accessScreen" class="screen hidden">
+<section class="screen hidden" id="accessScreen">
 
     <div class="access">
 
-        <div class="access-code">
-            IDENTITY VERIFIED // SECURITY CLEARANCE ACCEPTED
+        <div class="access-small">
+            IDENTITY VERIFIED // CREDENTIAL ACCEPTED
         </div>
 
-        <h1>ACCESS<br>GRANTED</h1>
+        <h1>
+            ACCESS<br>
+            GRANTED
+        </h1>
 
-        <h2>WELCOME, OPERATOR AVIYAN</h2>
+        <div class="access-team">
+            WELCOME, AVIYAN
+        </div>
 
-        <p>
-            CYBER SECURITY OPERATIONS // SESSION INITIALIZING
-        </p>
+        <div class="access-detail">
+            SECURITY OPERATIONS TEAM // OPERATOR SESSION AUTHORIZED
+        </div>
 
     </div>
 
 </section>
 
 
-<!-- ==================================================
-     COMMAND CENTER
-================================================== -->
+<!-- =======================================================
+     WORKSTATION
+======================================================= -->
 
-<main id="command" class="hidden">
+<main id="workstation" class="hidden">
 
-    <div class="command-shell">
+    <div class="workspace">
 
-        <header class="topbar">
+        <!-- SYSTEM BAR -->
 
-            <div class="brand">
+        <header class="system-bar">
 
-                <div class="brand-mark"></div>
+            <div class="system-left">
 
-                <div class="brand-name">
-                    AVIYAN // CYBER OPERATIONS
+                <div class="system-dot"></div>
+
+                <div class="system-brand">
+                    AVIYAN // SECURE OPS
                 </div>
 
             </div>
 
-            <div class="status">
-                ● SECURE SESSION ACTIVE
+            <div class="system-right">
+                SESSION: ACTIVE // ENCRYPTED // NODE 07
             </div>
 
         </header>
 
 
-        <section class="command-heading">
+        <!-- TITLE -->
+
+        <section class="workspace-title">
 
             <div class="eyebrow">
-                OPERATIONS FLOOR // NODE 07
+                SECURITY OPERATIONS TEAM // WORKSTATION 07
             </div>
 
             <h1>
-                WELCOME, AVIYAN
+                OPERATOR AVIYAN
             </h1>
 
             <p>
-                OPERATOR SESSION // ACTIVE // ALL SYSTEMS ONLINE
+                SECURE DEVELOPMENT ENVIRONMENT // READY
             </p>
 
         </section>
 
 
-        <section class="dashboard">
+        <!-- IDE -->
+
+        <section class="ide">
 
 
-            <!-- NETWORK -->
+            <!-- FILE SYSTEM -->
 
-            <div class="panel">
+            <aside class="sidebar">
 
-                <div class="panel-head">
+                <div class="sidebar-title">
+                    PROJECT FILES
+                </div>
 
-                    <span>
-                        GLOBAL NETWORK
-                    </span>
+                <div class="file active"
+                     data-file="main.js">
 
-                    <span>
-                        LIVE
-                    </span>
+                    <span class="icon">◆</span>
+                    main.js
 
                 </div>
 
-                <div class="panel-body">
+                <div class="file"
+                     data-file="security-core.js">
 
-                    <div class="network">
+                    <span class="icon">◆</span>
+                    security-core.js
 
-                        <svg viewBox="0 0 700 300">
+                </div>
 
-                            <line class="connection"
-                                  x1="100" y1="100"
-                                  x2="260" y2="65"/>
+                <div class="file"
+                     data-file="network-monitor.js">
 
-                            <line class="connection"
-                                  x1="100" y1="100"
-                                  x2="210" y2="210"/>
+                    <span class="icon">◆</span>
+                    network-monitor.js
 
-                            <line class="connection"
-                                  x1="260" y1="65"
-                                  x2="420" y2="120"/>
+                </div>
 
-                            <line class="connection"
-                                  x1="210" y1="210"
-                                  x2="420" y2="120"/>
+                <div class="file"
+                     data-file="incident-response.js">
 
-                            <line class="connection"
-                                  x1="420" y1="120"
-                                  x2="580" y2="70"/>
+                    <span class="icon">◆</span>
+                    incident-response.js
 
-                            <line class="connection"
-                                  x1="420" y1="120"
-                                  x2="560" y2="220"/>
+                </div>
 
-                            <line class="connection"
-                                  x1="210" y1="210"
-                                  x2="560" y2="220"/>
+                <div class="file"
+                     data-file="system.log">
 
-                            <circle class="node" cx="100" cy="100" r="5"/>
-                            <circle class="node" cx="260" cy="65" r="5"/>
-                            <circle class="node" cx="210" cy="210" r="5"/>
-                            <circle class="node" cx="420" cy="120" r="7"/>
-                            <circle class="node" cx="580" cy="70" r="5"/>
-                            <circle class="node" cx="560" cy="220" r="5"/>
+                    <span class="icon">◇</span>
+                    system.log
 
-                            <text class="node-label"
-                                  x="75" y="90">
-                                NODE-01
-                            </text>
+                </div>
 
-                            <text class="node-label"
-                                  x="235" y="50">
-                                NODE-02
-                            </text>
+                <div class="file restricted"
+                     data-file="SANA.enc">
 
-                            <text class="node-label"
-                                  x="185" y="230">
-                                NODE-03
-                            </text>
+                    <span class="icon">■</span>
+                    SANA.enc
 
-                            <text class="node-label"
-                                  x="390" y="110">
-                                CORE
-                            </text>
+                </div>
 
-                            <text class="node-label"
-                                  x="550" y="55">
-                                NODE-04
-                            </text>
+            </aside>
 
-                            <text class="node-label"
-                                  x="530" y="240">
-                                NODE-05
-                            </text>
 
-                        </svg>
+            <!-- CODE EDITOR -->
 
+            <section class="editor">
+
+                <div class="editor-header">
+
+                    <div class="editor-file"
+                         id="editorFile">
+                        main.js
+                    </div>
+
+                    <div class="editor-state"
+                         id="editorState">
+                        ● ACTIVE
                     </div>
 
                 </div>
 
-            </div>
+                <div class="code"
+                     id="codeEditor">
 
-
-            <!-- THREAT INTELLIGENCE -->
-
-            <div class="panel">
-
-                <div class="panel-head">
-
-                    <span>
-                        THREAT INTELLIGENCE
-                    </span>
-
-                    <span id="threatStatus">
-                        MONITORING
-                    </span>
+                    <!-- populated by JS -->
 
                 </div>
 
-                <div class="panel-body">
+            </section>
 
-                    <div class="threat">
 
-                        <div class="threat-top">
-                            <span>NETWORK ACTIVITY</span>
-                            <span>78%</span>
-                        </div>
+            <!-- MONITOR -->
 
-                        <div class="threat-bar">
-                            <span style="width:78%"></span>
-                        </div>
+            <aside class="monitor">
 
-                    </div>
-
-                    <div class="threat">
-
-                        <div class="threat-top">
-                            <span>ENCRYPTION</span>
-                            <span>96%</span>
-                        </div>
-
-                        <div class="threat-bar">
-                            <span style="width:96%"></span>
-                        </div>
-
-                    </div>
-
-                    <div class="threat">
-
-                        <div class="threat-top">
-                            <span>PERIMETER</span>
-                            <span>91%</span>
-                        </div>
-
-                        <div class="threat-bar">
-                            <span style="width:91%"></span>
-                        </div>
-
-                    </div>
-
-                    <div class="threat">
-
-                        <div class="threat-top">
-                            <span>ANOMALIES</span>
-                            <span id="anomalyValue">04</span>
-                        </div>
-
-                        <div class="threat-bar">
-                            <span id="anomalyBar" style="width:32%"></span>
-                        </div>
-
-                    </div>
-
+                <div class="monitor-title">
+                    LIVE SYSTEM MONITOR
                 </div>
 
-            </div>
+                <div class="monitor-body">
 
+                    <div class="monitor-section">
 
-            <!-- TERMINAL -->
+                        <div class="monitor-label">
+                            CPU LOAD
+                        </div>
 
-            <div class="panel">
+                        <div class="monitor-value"
+                             id="cpuValue">
+                            37%
+                        </div>
 
-                <div class="panel-head">
+                        <div class="monitor-line">
+                            <span id="cpuBar"
+                                  style="width:37%">
+                            </span>
+                        </div>
 
-                    <span>
-                        OPERATIONS TERMINAL
-                    </span>
-
-                    <span>
-                        INTERACTIVE
-                    </span>
-
-                </div>
-
-                <div class="terminal" id="terminal">
-
-                    <div class="term-line">
-                        AVIYAN@OPS:~$ <span class="cmd">session --initialize</span>
                     </div>
 
-                    <div class="term-line green">
-                        [OK] Secure operator session established.
+                    <div class="monitor-section">
+
+                        <div class="monitor-label">
+                            ENCRYPTION
+                        </div>
+
+                        <div class="monitor-value">
+                            AES-256
+                        </div>
+
+                        <div class="monitor-line">
+                            <span style="width:96%">
+                            </span>
+                        </div>
+
                     </div>
 
-                    <div class="term-line">
-                        AVIYAN@OPS:~$ <span class="cmd">security --status</span>
+                    <div class="monitor-section">
+
+                        <div class="monitor-label">
+                            NETWORK
+                        </div>
+
+                        <div class="monitor-value"
+                             id="networkValue">
+                            SECURE
+                        </div>
+
                     </div>
 
-                    <div class="term-line green">
-                        [OK] Security core operational.
-                    </div>
+                    <div class="monitor-section">
 
-                    <div class="term-line">
-                        AVIYAN@OPS:~$ <span class="cmd">network --scan</span>
-                    </div>
+                        <div class="monitor-label">
+                            ACTIVITY
+                        </div>
 
-                    <div class="term-line">
-                        Scanning operational nodes...
-                    </div>
+                        <div class="activity"
+                             id="activityLog">
 
-                    <div class="term-line green">
-                        [OK] No critical intrusion detected.
-                    </div>
+                            <div>
+                                [05:53:11] workstation ready
+                            </div>
 
-                    <div class="term-input">
+                            <div class="ok">
+                                [05:53:13] encryption active
+                            </div>
 
-                        <span>AVIYAN@OPS:~$</span>
+                            <div>
+                                [05:53:16] monitoring nodes
+                            </div>
 
-                        <input
-                            id="terminalInput"
-                            autocomplete="off"
-                            spellcheck="false"
-                        >
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
-
-
-            <!-- SECURITY CORE -->
-
-            <div class="panel">
-
-                <div class="panel-head">
-
-                    <span>
-                        SECURITY CORE
-                    </span>
-
-                    <span>
-                        ONLINE
-                    </span>
-
-                </div>
-
-                <div class="core">
-
-                    <div class="core-circle">
-
-                        <div class="core-center"></div>
-
-                    </div>
-
-                </div>
-
-            </div>
+            </aside>
 
         </section>
 
 
-        <!-- CONTROLS -->
+        <!-- TERMINAL -->
 
-        <section class="controls">
+        <section class="terminal">
 
-            <button class="control" data-action="network">
-                NETWORK SCAN
-            </button>
+            <div class="terminal-head">
 
-            <button class="control" data-action="threat">
-                THREAT ANALYSIS
-            </button>
+                <span>
+                    SECURE TERMINAL
+                </span>
 
-            <button class="control" data-action="encrypt">
-                ENCRYPTION CORE
-            </button>
-
-            <button class="control" data-action="secure">
-                SECURE PERIMETER
-            </button>
-
-        </section>
-
-
-        <!-- PERSONAL MESSAGE -->
-
-        <section class="personal">
-
-            <div class="personal-inner">
-
-                <div class="personal-label">
-                    PRIORITY // PERSONAL CHANNEL
-                </div>
-
-                <h2>
-                    Hey <strong>Aviyan</strong>,<br>
-                    how are you doing today?
-                </h2>
-
-                <div class="personal-line"></div>
-
-                <div class="question">
-                    FRESH FROM YESTERDAY'S HANGOUT?
-                </div>
+                <span class="green">
+                    ENCRYPTED
+                </span>
 
             </div>
 
-        </section>
+            <div class="terminal-body"
+                 id="terminalBody">
 
+                <div class="terminal-line">
+                    AVIYAN@SECURE-OPS:~$
+                    <span class="command">
+                        session --initialize
+                    </span>
+                </div>
 
-        <!-- FINAL -->
+                <div class="terminal-line success">
+                    [OK] Secure session established.
+                </div>
 
-        <section class="final">
+                <div class="terminal-line">
+                    AVIYAN@SECURE-OPS:~$
+                    <span class="command">
+                        security --status
+                    </span>
+                </div>
 
-            <div>
+                <div class="terminal-line success">
+                    [OK] Defensive systems operational.
+                </div>
 
-                <h2>
-                    AVIYAN
-                </h2>
+                <div class="terminal-input-row">
 
-                <p>
-                    CYBER SECURITY OPERATIONS // SESSION ACTIVE
-                </p>
+                    <span>
+                        AVIYAN@SECURE-OPS:~$
+                    </span>
 
-                <p style="margin-top:30px">
-                    END OF TRANSMISSION
-                </p>
+                    <input
+                        id="commandInput"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+
+                </div>
 
             </div>
 
@@ -1637,36 +1836,106 @@ body:before{
 </main>
 
 
-<!-- ==================================================
-     NOTIFICATION
-================================================== -->
+<!-- =======================================================
+     FILE WINDOW
+======================================================= -->
 
-<div class="notification" id="notification">
+<div class="file-overlay" id="fileOverlay">
 
-    <div class="notification-top">
+    <div class="file-window">
 
-        <span id="notificationType">
-            SYSTEM EVENT
-        </span>
+        <div class="file-window-head">
 
-        <span>
-            LIVE
-        </span>
+            <div class="window-title"
+                 id="windowTitle">
+                FILE
+            </div>
+
+            <div>
+
+                <span class="window-status">
+                    SECURE EDITOR
+                </span>
+
+                <button class="close-window"
+                        id="closeWindow">
+                    CLOSE
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="file-window-code"
+             id="windowCode">
+        </div>
 
     </div>
 
-    <p id="notificationText">
-        Operation completed.
-    </p>
+</div>
+
+
+<!-- =======================================================
+     FINAL REVEAL
+======================================================= -->
+
+<div class="reveal" id="reveal">
+
+    <div class="reveal-inner">
+
+        <div class="reveal-classification">
+            RESTRICTED FILE // ACCESS OVERRIDE // PERSONAL CHANNEL
+        </div>
+
+        <h1>
+            SANA
+        </h1>
+
+        <div class="reveal-line"></div>
+
+        <div class="reveal-message">
+
+            The system was built for security.<br>
+            The files were built for work.<br>
+            But somehow, somewhere inside all that code,<br>
+            there was one name Aviyan couldn't encrypt away.
+
+        </div>
+
+        <div class="reveal-signature">
+            AVIYAN // END OF SECURE SESSION
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     NOTIFICATION
+======================================================= -->
+
+<div class="notification"
+     id="notification">
+
+    <div class="notification-label"
+         id="notificationLabel">
+        SYSTEM
+    </div>
+
+    <div class="notification-text"
+         id="notificationText">
+        Operation complete.
+    </div>
 
 </div>
 
 
 <script>
 
-/* ==================================================
+/* =========================================================
    CLOCK
-================================================== */
+========================================================= */
 
 function updateClock(){
 
@@ -1676,7 +1945,7 @@ function updateClock(){
     const m = String(now.getMinutes()).padStart(2,"0");
     const s = String(now.getSeconds()).padStart(2,"0");
 
-    document.getElementById("clock").textContent =
+    document.getElementById("arrivalClock").textContent =
         `${h}:${m}:${s} // SECURE FACILITY`;
 
 }
@@ -1685,26 +1954,29 @@ setInterval(updateClock,1000);
 updateClock();
 
 
-/* ==================================================
-   SCREEN HELPER
-================================================== */
+/* =========================================================
+   SCREEN CONTROL
+========================================================= */
 
 function showScreen(id){
 
-    document.querySelectorAll(".screen")
+    document
+        .querySelectorAll(".screen")
         .forEach(screen=>{
             screen.classList.add("hidden");
         });
 
-    document.getElementById(id)
+    document
+        .getElementById(id)
         .classList.remove("hidden");
 
 }
 
 
-/* ==================================================
-   ARRIVAL -> BOOT
-================================================== */
+/* =========================================================
+   ARRIVAL TIMELINE
+   FIRST 7 SECONDS
+========================================================= */
 
 setTimeout(()=>{
 
@@ -1712,123 +1984,122 @@ setTimeout(()=>{
 
     startBoot();
 
-},4000);
+},7000);
 
 
-/* ==================================================
+/* =========================================================
    BOOT SEQUENCE
-================================================== */
+========================================================= */
 
 const bootMessages = [
 
-    "SECURE FACILITY CONNECTION .............. ESTABLISHED",
-    "WORKSTATION POWER ........................ ONLINE",
-    "BIOMETRIC ENVIRONMENT .................... VERIFIED",
-    "SECURITY CORE ............................ ONLINE",
-    "ENCRYPTION MODULE ......................... ACTIVE",
-    "THREAT INTELLIGENCE ...................... READY",
-    "GLOBAL NETWORK ........................... CONNECTED",
-    "OPERATIONS TERMINAL ....................... READY",
-    "OPERATOR WORKSPACE ........................ WAITING",
-    "",
-    "WELCOME BACK, AVIYAN.",
-    "AWAITING OPERATOR AUTHENTICATION..."
+    ["CONNECTING TO SECURE FACILITY ............ ESTABLISHED","ok"],
+    ["BIOMETRIC ENVIRONMENT .................... VERIFIED","ok"],
+    ["WORKSTATION POWER ........................ ONLINE","ok"],
+    ["LOCAL ENCRYPTION ......................... AES-256","system"],
+    ["SECURITY KERNEL .......................... LOADED","ok"],
+    ["NETWORK INTERFACE ........................ CONNECTED","ok"],
+    ["DEFENSIVE SYSTEMS ........................ ACTIVE","ok"],
+    ["THREAT MONITOR ........................... ONLINE","ok"],
+    ["OPERATOR WORKSPACE ......................... READY","ok"],
+    ["SESSION AUTHORITY ......................... LEVEL ALPHA","system"],
+    ["",""],
+    ["OPERATOR PROFILE .......................... AVIYAN","active"],
+    ["AUTHENTICATION REQUIRED ................... WAITING","active"]
 
 ];
 
 function startBoot(){
 
-    const log = document.getElementById("bootLog");
+    const log =
+        document.getElementById("bootLog");
 
     log.innerHTML="";
 
-    let i=0;
+    let index=0;
 
-    function next(){
+    function nextLine(){
 
-        if(i >= bootMessages.length){
+        if(index >= bootMessages.length){
 
             setTimeout(()=>{
                 showScreen("authScreen");
-            },900);
+
+                setTimeout(()=>{
+                    document
+                        .getElementById("password")
+                        .focus();
+                },300);
+
+            },1000);
 
             return;
         }
 
+        const item =
+            bootMessages[index];
+
         const line =
             document.createElement("div");
 
+        line.className =
+            "boot-line " + item[1];
+
         line.textContent =
-            bootMessages[i];
-
-        if(
-            bootMessages[i].includes("ONLINE") ||
-            bootMessages[i].includes("READY") ||
-            bootMessages[i].includes("CONNECTED") ||
-            bootMessages[i].includes("ACTIVE") ||
-            bootMessages[i].includes("VERIFIED")
-        ){
-
-            line.className="ok";
-
-        }
-
-        if(
-            bootMessages[i].includes("WELCOME") ||
-            bootMessages[i].includes("AWAITING")
-        ){
-
-            line.className="active";
-
-        }
+            item[0];
 
         log.appendChild(line);
 
-        log.scrollTop = log.scrollHeight;
+        log.scrollTop =
+            log.scrollHeight;
 
-        i++;
+        index++;
 
-        setTimeout(next,260);
+        setTimeout(
+            nextLine,
+            360
+        );
 
     }
 
-    next();
+    nextLine();
 
 }
 
 
-/* ==================================================
-   PASSWORD
-================================================== */
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
 
-const passwordInput =
+const password =
     document.getElementById("password");
 
-const authBtn =
-    document.getElementById("authBtn");
+const authButton =
+    document.getElementById("authButton");
 
 const authStatus =
     document.getElementById("authStatus");
 
-passwordInput.focus();
 
 function authenticate(){
 
     const value =
-        passwordInput.value.trim().toLowerCase();
+        password.value.trim().toLowerCase();
 
     if(value === "sana"){
 
         authStatus.textContent =
-            "IDENTITY VERIFIED // ACCESS GRANTED";
+            "IDENTITY VERIFIED // SECURITY CLEARANCE ACCEPTED";
 
         authStatus.classList.add("success");
 
-        authBtn.textContent =
-            "ACCESS GRANTED";
+        authButton.textContent =
+            "AUTHENTICATION SUCCESSFUL";
 
-        passwordInput.disabled = true;
-        authBtn.disabled = true;
+        password.disabled=true;
+        authButton.disabled=true;
+
+        flashScreen();
 
         setTimeout(()=>{
 
@@ -1842,16 +2113,13 @@ function authenticate(){
                 .getElementById("accessScreen")
                 .classList.add("hidden");
 
-            const command =
-                document.getElementById("command");
+            document
+                .getElementById("workstation")
+                .classList.remove("hidden");
 
-            command.classList.remove("hidden");
+            startWorkSequence();
 
-            window.scrollTo(0,0);
-
-            startCommandCenter();
-
-        },3600);
+        },5200);
 
     }else{
 
@@ -1859,17 +2127,16 @@ function authenticate(){
             "ACCESS DENIED // INVALID CREDENTIAL";
 
         authStatus.style.color =
-            "#ff163d";
+            "var(--red)";
 
-        passwordInput.value = "";
+        password.value="";
 
         setTimeout(()=>{
 
             authStatus.textContent =
                 "AWAITING SECURE INPUT...";
 
-            authStatus.style.color =
-                "";
+            authStatus.style.color="";
 
         },1800);
 
@@ -1877,16 +2144,16 @@ function authenticate(){
 
 }
 
-authBtn.addEventListener(
+authButton.addEventListener(
     "click",
     authenticate
 );
 
-passwordInput.addEventListener(
+password.addEventListener(
     "keydown",
     event=>{
 
-        if(event.key === "Enter"){
+        if(event.key==="Enter"){
             authenticate();
         }
 
@@ -1894,68 +2161,525 @@ passwordInput.addEventListener(
 );
 
 
-/* ==================================================
-   COMMAND CENTER
-================================================== */
+/* =========================================================
+   FLASH
+========================================================= */
 
-function startCommandCenter(){
+function flashScreen(){
 
-    typeTerminalLine(
-        "AVIYAN@OPS:~$ operator --ready"
-    );
+    const flash =
+        document.getElementById("flash");
 
-    setTimeout(()=>{
+    flash.classList.remove("active");
 
-        typeTerminalLine(
-            "[OK] Operator AVIYAN ready for active operations."
-        );
+    void flash.offsetWidth;
 
-    },1000);
-
-    setTimeout(()=>{
-
-        showNotification(
-            "WELCOME",
-            "Operator Aviyan, your workstation is ready. Cyber security operations are now active."
-        );
-
-    },1800);
+    flash.classList.add("active");
 
 }
 
 
-/* ==================================================
+/* =========================================================
+   FILE CONTENT
+========================================================= */
+
+const files = {
+
+"main.js":[
+"// AVIYAN SECURITY OPERATIONS",
+"",
+"const workstation = {",
+"    operator: \"AVIYAN\",",
+"    clearance: \"ALPHA\",",
+"    encryption: \"AES-256\",",
+"    status: \"ACTIVE\"",
+"};",
+"",
+"function initializeSecurity(){",
+"    console.log(\"Initializing secure environment...\");",
+"    verifyIdentity();",
+"    loadDefensiveModules();",
+"    monitorNetwork();",
+"}",
+"",
+"function verifyIdentity(){",
+"    return workstation.operator === \"AVIYAN\";",
+"}",
+"",
+"initializeSecurity();"
+],
+
+"security-core.js":[
+"// SECURITY CORE",
+"",
+"const encryption = {",
+"    algorithm: \"AES-256\",",
+"    protocol: \"TLS-1.3\",",
+"    keyRotation: true",
+"};",
+"",
+"function activateCore(){",
+"    return {",
+"        state: \"SECURE\",",
+"        monitoring: true,",
+"        intrusionDetection: true",
+"    };",
+"}",
+"",
+"const core = activateCore();",
+"console.log(core);"
+],
+
+"network-monitor.js":[
+"// LIVE NETWORK MONITOR",
+"",
+"const nodes = [",
+"    \"NODE-01\",",
+"    \"NODE-02\",",
+"    \"NODE-03\",",
+"    \"NODE-04\",",
+"    \"NODE-05\"",
+"];",
+"",
+"function scanNetwork(){",
+"    nodes.forEach(node => {",
+"        console.log(",
+"            `${node} :: ONLINE`",
+"        );",
+"    });",
+"}",
+"",
+"scanNetwork();"
+],
+
+"incident-response.js":[
+"// INCIDENT RESPONSE ENGINE",
+"",
+"function analyzeEvent(event){",
+"    if(!event){",
+"        return \"NO EVENT\";",
+"    }",
+"",
+"    const severity =",
+"        calculateSeverity(event);",
+"",
+"    return dispatchResponse(severity);",
+"}",
+"",
+"function calculateSeverity(event){",
+"    return event.priority || \"LOW\";",
+"}",
+"",
+"function dispatchResponse(level){",
+"    return `RESPONSE :: ${level}`;",
+"}"
+],
+
+"system.log":[
+"[SYSTEM] workstation initialized",
+"[SYSTEM] operator authenticated",
+"[SECURITY] encryption layer active",
+"[NETWORK] secure nodes connected",
+"[MONITOR] defensive systems online",
+"[OPS] operator session active",
+"[OPS] awaiting next command",
+"",
+"[NOTICE] restricted file detected",
+"[NOTICE] access classification: PERSONAL",
+"[NOTICE] manual authorization required"
+],
+
+"SANA.enc":[
+"----- BEGIN RESTRICTED FILE -----",
+"",
+"CLASSIFICATION: PERSONAL",
+"OWNER: AVIYAN",
+"STATUS: ENCRYPTED",
+"",
+"ACCESS CONDITION:",
+"AUTHENTICATED OPERATOR",
+"",
+"DECRYPTION KEY: SANA",
+"",
+"----- END RESTRICTED FILE -----"
+]
+
+};
+
+
+/* =========================================================
+   RENDER CODE
+========================================================= */
+
+function renderCode(
+    fileName,
+    target
+){
+
+    const lines =
+        files[fileName] || [];
+
+    target.innerHTML="";
+
+    lines.forEach(
+        (line,index)=>{
+
+            const row =
+                document.createElement("div");
+
+            row.className="code-line";
+
+            const number =
+                document.createElement("span");
+
+            number.className="line-number";
+
+            number.textContent =
+                String(index+1).padStart(2," ");
+
+            const content =
+                document.createElement("span");
+
+            content.className="code-content";
+
+            content.textContent=line;
+
+            row.appendChild(number);
+            row.appendChild(content);
+
+            target.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIAL EDITOR
+========================================================= */
+
+renderCode(
+    "main.js",
+    document.getElementById("codeEditor")
+);
+
+
+/* =========================================================
+   FILE CLICK
+========================================================= */
+
+document
+    .querySelectorAll(".file")
+    .forEach(file=>{
+
+        file.addEventListener(
+            "click",
+            ()=>{
+
+                const fileName =
+                    file.dataset.file;
+
+                document
+                    .querySelectorAll(".file")
+                    .forEach(f=>
+                        f.classList.remove("active")
+                    );
+
+                file.classList.add("active");
+
+                openFile(
+                    fileName
+                );
+
+            }
+        );
+
+    });
+
+
+function openFile(fileName){
+
+    document
+        .getElementById("editorFile")
+        .textContent=fileName;
+
+    renderCode(
+        fileName,
+        document.getElementById("codeEditor")
+    );
+
+    addActivity(
+        "opened " + fileName
+    );
+
+    if(fileName === "SANA.enc"){
+
+        setTimeout(
+            beginRestrictedSequence,
+            1300
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FILE WINDOW
+========================================================= */
+
+const overlay =
+    document.getElementById("fileOverlay");
+
+const windowTitle =
+    document.getElementById("windowTitle");
+
+const windowCode =
+    document.getElementById("windowCode");
+
+
+function openWindow(fileName){
+
+    windowTitle.textContent =
+        fileName;
+
+    windowCode.innerHTML="";
+
+    const lines =
+        files[fileName] || [];
+
+    lines.forEach(
+        (line,index)=>{
+
+            const div =
+                document.createElement("div");
+
+            div.textContent =
+                `${String(index+1).padStart(3,"0")}  ${line}`;
+
+            windowCode.appendChild(div);
+
+        }
+    );
+
+    overlay.classList.add("open");
+
+}
+
+
+document
+    .getElementById("closeWindow")
+    .addEventListener(
+        "click",
+        ()=>{
+            overlay.classList.remove("open");
+        }
+    );
+
+
+/* =========================================================
+   WORK SEQUENCE
+   APPROX 30+ SECONDS AFTER LOGIN
+========================================================= */
+
+function startWorkSequence(){
+
+    addActivity(
+        "operator workstation activated"
+    );
+
+    showNotification(
+        "WORKSTATION",
+        "Welcome to the Security Operations Team, Aviyan."
+    );
+
+    setTimeout(()=>{
+
+        addActivity(
+            "loading security-core.js"
+        );
+
+        renderCode(
+            "security-core.js",
+            document.getElementById("codeEditor")
+        );
+
+        document
+            .getElementById("editorFile")
+            .textContent =
+            "security-core.js";
+
+    },4000);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "AVIYAN@SECURE-OPS:~$ security --initialize"
+        );
+
+    },7000);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "[OK] Security core initialized."
+        );
+
+    },7800);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "AVIYAN@SECURE-OPS:~$ network --scan"
+        );
+
+    },9500);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "[OK] 5 secure nodes responding."
+        );
+
+        addActivity(
+            "network scan complete"
+        );
+
+    },10500);
+
+    setTimeout(()=>{
+
+        renderCode(
+            "network-monitor.js",
+            document.getElementById("codeEditor")
+        );
+
+        document
+            .getElementById("editorFile")
+            .textContent =
+            "network-monitor.js";
+
+        addActivity(
+            "operator opened network-monitor.js"
+        );
+
+    },12500);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "AVIYAN@SECURE-OPS:~$ monitor --live"
+        );
+
+    },14500);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "[MONITOR] Live network telemetry active."
+        );
+
+    },15300);
+
+    setTimeout(()=>{
+
+        renderCode(
+            "incident-response.js",
+            document.getElementById("codeEditor")
+        );
+
+        document
+            .getElementById("editorFile")
+            .textContent =
+            "incident-response.js";
+
+        addActivity(
+            "incident-response module loaded"
+        );
+
+    },17500);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "AVIYAN@SECURE-OPS:~$ response --check"
+        );
+
+    },19500);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "[OK] Incident response engine ready."
+        );
+
+    },20500);
+
+    setTimeout(()=>{
+
+        showNotification(
+            "SYSTEM EVENT",
+            "A restricted file has been detected inside the workspace."
+        );
+
+        addActivity(
+            "RESTRICTED FILE DETECTED",
+            true
+        );
+
+    },22500);
+
+    setTimeout(()=>{
+
+        document
+            .querySelector('[data-file="SANA.enc"]')
+            .style.color =
+            "var(--red)";
+
+    },23500);
+
+}
+
+
+/* =========================================================
    TERMINAL
-================================================== */
+========================================================= */
 
-const terminal =
-    document.getElementById("terminal");
+const terminalBody =
+    document.getElementById("terminalBody");
 
-const terminalInput =
-    document.getElementById("terminalInput");
+const commandInput =
+    document.getElementById("commandInput");
 
-function typeTerminalLine(text){
+
+function typeTerminal(text){
+
+    const inputRow =
+        terminalBody.querySelector(
+            ".terminal-input-row"
+        );
 
     const line =
         document.createElement("div");
 
     line.className =
-        "term-line";
+        "terminal-line";
 
-    line.textContent =
-        text;
+    line.textContent=text;
 
-    terminal.insertBefore(
+    terminalBody.insertBefore(
         line,
-        terminal.querySelector(".term-input")
+        inputRow
     );
 
-    terminal.scrollTop =
-        terminal.scrollHeight;
+    terminalBody.scrollTop =
+        terminalBody.scrollHeight;
 
 }
 
-terminalInput.addEventListener(
+
+commandInput.addEventListener(
     "keydown",
     event=>{
 
@@ -1963,59 +2687,68 @@ terminalInput.addEventListener(
             return;
 
         const command =
-            terminalInput.value.trim();
+            commandInput.value.trim();
 
         if(!command)
             return;
 
-        typeTerminalLine(
-            "AVIYAN@OPS:~$ " + command
+        typeTerminal(
+            "AVIYAN@SECURE-OPS:~$ " +
+            command
         );
 
-        terminalInput.value="";
+        commandInput.value="";
 
         setTimeout(()=>{
-
-            let response =
-                "[OK] Command processed.";
 
             const lower =
                 command.toLowerCase();
 
             if(lower.includes("scan")){
 
-                response =
-                    "[SCAN] Network scan complete. 0 critical threats.";
-
-            }else if(lower.includes("security")){
-
-                response =
-                    "[SECURITY] All defensive systems operational.";
-
-            }else if(lower.includes("encrypt")){
-
-                response =
-                    "[CRYPTO] Encryption core operating at maximum security.";
+                typeTerminal(
+                    "[SCAN] Network analysis complete. No critical intrusion."
+                );
 
             }else if(lower.includes("status")){
 
-                response =
-                    "[STATUS] AVIYAN session stable. Operations active.";
+                typeTerminal(
+                    "[STATUS] Operator session secure."
+                );
+
+            }else if(lower.includes("encrypt")){
+
+                typeTerminal(
+                    "[CRYPTO] AES-256 encryption verified."
+                );
+
+            }else if(lower.includes("help")){
+
+                typeTerminal(
+                    "[COMMANDS] scan / status / encrypt / monitor / clear"
+                );
+
+            }else if(lower.includes("monitor")){
+
+                typeTerminal(
+                    "[MONITOR] Live telemetry active."
+                );
 
             }else if(lower.includes("clear")){
 
-                terminal.innerHTML = `
-
-                    <div class="term-line green">
-                        Terminal cleared.
+                terminalBody.innerHTML = `
+                    <div class="terminal-line success">
+                        Terminal session cleared.
                     </div>
 
-                    <div class="term-input">
+                    <div class="terminal-input-row">
 
-                        <span>AVIYAN@OPS:~$</span>
+                        <span>
+                            AVIYAN@SECURE-OPS:~$
+                        </span>
 
                         <input
-                            id="terminalInput"
+                            id="commandInput"
                             autocomplete="off"
                             spellcheck="false"
                         >
@@ -2023,192 +2756,251 @@ terminalInput.addEventListener(
                     </div>
                 `;
 
-                const newInput =
-                    document.getElementById("terminalInput");
-
-                newInput.focus();
-
                 return;
+
+            }else{
+
+                typeTerminal(
+                    "[OK] Command accepted by secure environment."
+                );
 
             }
 
-            typeTerminalLine(response);
-
-        },450);
+        },500);
 
     }
 );
 
 
-/* ==================================================
-   CONTROL BUTTONS
-================================================== */
+/* =========================================================
+   ACTIVITY
+========================================================= */
 
-document
-.querySelectorAll(".control")
-.forEach(button=>{
+function addActivity(
+    text,
+    alert=false
+){
 
-    button.addEventListener(
-        "click",
-        ()=>{
+    const log =
+        document.getElementById("activityLog");
 
-            document
-                .querySelectorAll(".control")
-                .forEach(b=>
-                    b.classList.remove("active")
-                );
+    const line =
+        document.createElement("div");
 
-            button.classList.add("active");
+    if(alert)
+        line.className="alert";
 
-            const action =
-                button.dataset.action;
+    const now =
+        new Date();
 
-            if(action === "network"){
+    const time =
+        [
+            now.getHours(),
+            now.getMinutes(),
+            now.getSeconds()
+        ]
+        .map(
+            x=>String(x).padStart(2,"0")
+        )
+        .join(":");
 
-                showNotification(
-                    "NETWORK SCAN",
-                    "Global network scan complete. Operational nodes responding normally."
-                );
+    line.textContent =
+        `[${time}] ${text}`;
 
-                typeTerminalLine(
-                    "[SCAN] Global network analysis complete."
-                );
+    log.appendChild(line);
 
-            }
+    log.scrollTop =
+        log.scrollHeight;
 
-            if(action === "threat"){
+}
 
-                document
-                    .getElementById("threatStatus")
-                    .textContent =
-                    "ANALYZING";
 
-                setTimeout(()=>{
+/* =========================================================
+   CPU ANIMATION
+========================================================= */
 
-                    document
-                        .getElementById("threatStatus")
-                        .textContent =
-                        "MONITORING";
+setInterval(()=>{
 
-                },1800);
+    const value =
+        Math.floor(
+            Math.random()*40
+        )+30;
 
-                showNotification(
-                    "THREAT ANALYSIS",
-                    "Threat intelligence analysis running across active network nodes."
-                );
+    document
+        .getElementById("cpuValue")
+        .textContent =
+        value+"%";
 
-            }
+    document
+        .getElementById("cpuBar")
+        .style.width =
+        value+"%";
 
-            if(action === "encrypt"){
+},1800);
 
-                showNotification(
-                    "ENCRYPTION CORE",
-                    "Encryption layer verified. Secure communications channel active."
-                );
 
-                typeTerminalLine(
-                    "[CRYPTO] Encryption verification complete."
-                );
+/* =========================================================
+   RESTRICTED SEQUENCE
+========================================================= */
 
-            }
+let restrictedStarted=false;
 
-            if(action === "secure"){
+function beginRestrictedSequence(){
 
-                showNotification(
-                    "PERIMETER",
-                    "Security perimeter checked. No critical intrusion detected."
-                );
+    if(restrictedStarted)
+        return;
 
-                typeTerminalLine(
-                    "[PERIMETER] Defensive perimeter secure."
-                );
+    restrictedStarted=true;
 
-            }
+    flashScreen();
 
-        }
+    typeTerminal(
+        "AVIYAN@SECURE-OPS:~$ access SANA.enc"
     );
 
-});
+    setTimeout(()=>{
+
+        typeTerminal(
+            "[AUTH] Restricted file detected."
+        );
+
+    },700);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "[AUTH] Personal classification."
+        );
+
+    },1400);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "[AUTH] Operator authorization accepted."
+        );
+
+    },2100);
+
+    setTimeout(()=>{
+
+        typeTerminal(
+            "[DECRYPT] Beginning secure file recovery..."
+        );
+
+    },3000);
+
+    setTimeout(()=>{
+
+        showNotification(
+            "RESTRICTED FILE",
+            "SANA.enc is being decrypted..."
+        );
+
+    },3800);
+
+    setTimeout(()=>{
+
+        document
+            .getElementById("reveal")
+            .classList.add("open");
+
+    },6000);
+
+}
 
 
-/* ==================================================
+/* =========================================================
    NOTIFICATION
-================================================== */
+========================================================= */
 
 let notificationTimer;
 
-function showNotification(type,text){
+function showNotification(
+    label,
+    text
+){
 
-    const notification =
+    const box =
         document.getElementById("notification");
 
     document
-        .getElementById("notificationType")
-        .textContent = type;
+        .getElementById("notificationLabel")
+        .textContent=label;
 
     document
         .getElementById("notificationText")
-        .textContent = text;
+        .textContent=text;
 
-    notification.classList.add("show");
+    box.classList.add("show");
 
-    clearTimeout(notificationTimer);
+    clearTimeout(
+        notificationTimer
+    );
 
     notificationTimer =
         setTimeout(()=>{
 
-            notification.classList.remove("show");
+            box.classList.remove("show");
 
         },5000);
 
 }
 
 
-/* ==================================================
-   AMBIENT THREAT ANIMATION
-================================================== */
+/* =========================================================
+   BACKGROUND ACTIVITY
+========================================================= */
 
 setInterval(()=>{
 
-    const value =
-        Math.floor(
-            Math.random()*7
-        ) + 1;
+    if(
+        document
+            .getElementById("workstation")
+            .classList.contains("hidden")
+    ){
+        return;
+    }
 
-    document
-        .getElementById("anomalyValue")
-        .textContent =
-        String(value).padStart(2,"0");
+    const messages=[
 
-    document
-        .getElementById("anomalyBar")
-        .style.width =
-        (value*8)+"%";
+        "telemetry packet received",
+        "security heartbeat verified",
+        "node synchronization complete",
+        "encrypted channel refreshed",
+        "defensive signature updated",
+        "network integrity verified"
 
-},2500);
+    ];
+
+    const message =
+        messages[
+            Math.floor(
+                Math.random()*messages.length
+            )
+        ];
+
+    addActivity(message);
+
+},4200);
 
 
-/* ==================================================
-   KEYBOARD SHORTCUT
-================================================== */
+/* =========================================================
+   INITIAL FOCUS
+========================================================= */
 
-document.addEventListener(
-    "keydown",
-    event=>{
-
-        if(
-            event.ctrlKey &&
-            event.shiftKey &&
-            event.key.toLowerCase()==="a"
-        ){
-
-            showNotification(
-                "AVIYAN",
-                "Operator session is active."
-            );
-
-        }
-
+window.addEventListener(
+    "load",
+    ()=>{
+        setTimeout(()=>{
+            if(
+                !document
+                    .getElementById("authScreen")
+                    .classList.contains("hidden")
+            ){
+                password.focus();
+            }
+        },1000);
     }
 );
 
@@ -2216,3 +3008,4 @@ document.addEventListener(
 
 </body>
 </html>
+```
